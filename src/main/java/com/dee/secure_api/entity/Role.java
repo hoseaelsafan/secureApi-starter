@@ -1,9 +1,13 @@
 package com.dee.secure_api.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Roles")
+@Getter
+@Setter
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,7 +16,4 @@ public class Role {
     @Enumerated(EnumType.STRING) // store enum as text
     @Column(length = 20, unique = true, nullable = false)
     private ERole name;
-
-    public Role() {}
-    public Role(ERole name) { this.name = name; }
 }
