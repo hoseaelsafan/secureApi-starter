@@ -67,4 +67,8 @@ public class JwtUtils {
         return expiration.before(new Date()); // true if expiration date < now
     }
 
+    public long getExpirationMs() {
+        return expirationMs;
+    }
+
 }
