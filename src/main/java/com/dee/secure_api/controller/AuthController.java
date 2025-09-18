@@ -1,8 +1,6 @@
 package com.dee.secure_api.controller;
 
-import com.dee.secure_api.dto.ApiResponse;
-import com.dee.secure_api.dto.UserData;
-import com.dee.secure_api.dto.UserRegisReq;
+import com.dee.secure_api.dto.*;
 import com.dee.secure_api.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +18,12 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<?>> register(@RequestBody UserRegisReq dto) {
         ApiResponse<?> response = authService.registeruser(dto);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<JwtResponse>> login(@RequestBody UserLoginReq dto){
+        ApiResponse<JwtResponse> response = authService.loginuser(dto);
         return ResponseEntity.ok(response);
     }
 

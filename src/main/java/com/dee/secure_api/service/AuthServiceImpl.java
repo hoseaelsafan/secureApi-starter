@@ -65,4 +65,28 @@ public class AuthServiceImpl implements AuthService {
 
         return new ApiResponse<>("success", "00", userData);
     }
+
+    @Override
+    public ApiResponse<JwtResponse> loginuser(UserLoginReq dto){
+        // 1. Find user
+        User user = userRepository.findByUsername(dto.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 2. Validate password
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            return new ApiResponse<>("error", "03",null);
+        }
+
+        // 3. Generate JWT
+        String token = jwtUtils.generateToken(user.getUsername());
+
+        // 4. Build response
+        JwtResponse jwtResponse = new JwtResponse(
+                token,
+                "Bearer",
+                jwtUtils.getExpirationMs()
+        );
+
+        return new ApiResponse<>("success", "00", jwtResponse);
+    }
 }
