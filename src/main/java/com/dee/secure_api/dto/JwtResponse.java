@@ -11,4 +11,9 @@ public class JwtResponse {
     private String token;
     private String type = "Bearer";
     private Long expired;
+
+    public JwtResponse(String token, Long expired) {
+        this.token = token;
+        this.expired = expired;
+    }
 }
