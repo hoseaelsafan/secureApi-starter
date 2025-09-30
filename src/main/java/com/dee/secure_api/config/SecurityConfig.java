@@ -3,6 +3,7 @@ package com.dee.secure_api.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,7 +19,7 @@ import java.security.Security;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private  final AuthenticationConfiguration authconfig;
-
+    private final JwtAuthFilter jwtAuthFilter;
     // Authentication manager (used in AuthController)
     @Bean
     public AuthenticationManager authenticationManager() throws Exception{
@@ -36,9 +37,12 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated()
-                );
+                        .requestMatchers(HttpMethod.POST,"/api/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/user/me").hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
+                        .anyRequest().denyAll()
+                )
+                .addFilterBefore(jwtAuthFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }
