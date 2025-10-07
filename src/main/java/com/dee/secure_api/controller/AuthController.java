@@ -2,6 +2,7 @@ package com.dee.secure_api.controller;
 
 import com.dee.secure_api.dto.*;
 import com.dee.secure_api.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<?>> register(@RequestBody UserRegisReq dto) {
+    public ResponseEntity<ApiResponse<?>> register(@Valid @RequestBody UserRegisReq dto) {
         ApiResponse<?> response = authService.registeruser(dto);
         return ResponseEntity.ok(response);
     }
